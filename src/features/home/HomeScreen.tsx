@@ -29,16 +29,23 @@ export const HomeScreen = ({ onStartScan }: HomeScreenProps) => {
             />
           </svg>
         </div>
-        <h1 className="text-text text-3xl font-bold tracking-tight">Prompster</h1>
-        <p className="text-text-muted text-sm text-center">Dein Hitster-Begleiter</p>
+        <h1 className="text-text text-3xl font-bold tracking-tight">
+          Prompster
+        </h1>
+        <p className="text-text-muted text-sm text-center">
+          Dein Hitster-Begleiter
+        </p>
       </div>
 
       {/* Middle: Description */}
       <div className="flex flex-col gap-5 text-center max-w-xs">
         <div className="flex flex-col gap-2">
-          <h2 className="text-text text-xl font-semibold">Wie funktioniert's?</h2>
+          <h2 className="text-text text-xl font-semibold">
+            Wie funktioniert's?
+          </h2>
           <p className="text-text-muted text-sm leading-relaxed">
-            Scanne den QR-Code auf deiner Hitster-Karte und öffne den Song direkt in Spotify — kein Herumsuchen, einfach spielen.
+            Scanne den QR-Code auf deiner Hitster-Karte und öffne den Song
+            direkt in Spotify — kein Herumsuchen, einfach spielen.
           </p>
         </div>
 
