@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --color-bg: #0a0a0f;
+  --color-surface: #16162a;
+  --color-surface-elevated: #1e1e3a;
+  --color-primary: #ff2d78;
+  --color-primary-glow: rgba(255, 45, 120, 0.4);
+  --color-secondary: #00d4ff;
+  --color-secondary-glow: rgba(0, 212, 255, 0.4);
+  --color-accent: #ffd600;
+  --color-success: #00ff88;
+  --color-success-glow: rgba(0, 255, 136, 0.4);
+  --color-error: #ff4444;
+  --color-text: #ffffff;
+  --color-text-muted: #8888aa;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow: hidden;
+    overscroll-behavior: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+}
+
+/* Neon glow pulse for scanner frame */
+@keyframes neon-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 15px var(--color-secondary-glow),
+      inset 0 0 15px var(--color-secondary-glow);
+  }
+  50% {
+    box-shadow:
+      0 0 30px var(--color-secondary-glow),
+      inset 0 0 30px var(--color-secondary-glow);
+  }
+}
+
+@keyframes neon-pulse-success {
+  0%,
+  100% {
+    box-shadow:
+      0 0 15px var(--color-success-glow),
+      inset 0 0 15px var(--color-success-glow);
+  }
+  50% {
+    box-shadow:
+      0 0 40px var(--color-success-glow),
+      inset 0 0 40px var(--color-success-glow);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-8px);
+  }
+  40% {
+    transform: translateX(8px);
+  }
+  60% {
+    transform: translateX(-6px);
+  }
+  80% {
+    transform: translateX(6px);
+  }
+}
+
+@keyframes glow-flash {
+  0% {
+    box-shadow: 0 0 0 rgba(255, 45, 120, 0);
+  }
+  50% {
+    box-shadow: 0 0 60px rgba(255, 45, 120, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(255, 45, 120, 0);
+  }
+}
