@@ -1,14 +1,18 @@
 # Prompster Frontend
 
-Minimales Frontend für Prompster (React + Vite).
+A minimal frontend for Prompster, built with React and Vite.
 
-## Start
+Live version: https://mathisarends.github.io/prompster-frontend/
+
+## Getting started
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Wichtiger Hinweis
+## Build
 
-Eigene Karten, die mit **Hister** erstellt werden, können in der **Original-App** nicht abgespielt werden.
+```bash
+npm run build
+```
