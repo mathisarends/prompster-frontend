@@ -10,7 +10,7 @@
 const SPOTIFY_TRACK_RE =
   /(?:spotify:track:|open\.spotify\.com\/track\/)([a-zA-Z0-9]{22})/;
 
-export function parseSpotifyTrackId(payload: string): string | null {
+export const parseSpotifyTrackId = (payload: string): string | null => {
   const match = payload.match(SPOTIFY_TRACK_RE);
   return match ? match[1] : null;
-}
+};

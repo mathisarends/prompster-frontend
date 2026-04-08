@@ -5,7 +5,7 @@ interface PermissionGateProps {
   onRetry: () => void;
 }
 
-export function PermissionGate({ error, onRetry }: PermissionGateProps) {
+export const PermissionGate = ({ error, onRetry }: PermissionGateProps) => {
   const isDenied = error === "permission-denied";
 
   return (
@@ -64,4 +64,4 @@ export function PermissionGate({ error, onRetry }: PermissionGateProps) {
       )}
     </div>
   );
-}
+};

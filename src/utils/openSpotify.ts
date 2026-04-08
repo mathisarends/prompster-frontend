@@ -2,7 +2,7 @@
  * Attempts to open a Spotify track via deep link (native app),
  * falling back to the web player URL after a short delay.
  */
-export function openSpotifyTrack(trackId: string): void {
+export const openSpotifyTrack = (trackId: string): void => {
   const deepLink = `spotify:track:${trackId}`;
   const webUrl = `https://open.spotify.com/track/${trackId}`;
 
@@ -17,9 +17,9 @@ export function openSpotifyTrack(trackId: string): void {
       window.open(webUrl, "_blank", "noopener");
     }
   }, 800);
-}
+};
 
-export function copyTrackLink(trackId: string): Promise<void> {
+export const copyTrackLink = (trackId: string): Promise<void> => {
   const url = `https://open.spotify.com/track/${trackId}`;
   return navigator.clipboard.writeText(url);
-}
+};

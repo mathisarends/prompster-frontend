@@ -12,7 +12,7 @@ interface UseQrScannerResult {
   reset: () => void;
 }
 
-export function useQrScanner(): UseQrScannerResult {
+export const useQrScanner = (): UseQrScannerResult => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -45,7 +45,7 @@ export function useQrScanner(): UseQrScannerResult {
   useEffect(() => {
     let cancelled = false;
 
-    async function start() {
+    const start = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: {
@@ -74,7 +74,7 @@ export function useQrScanner(): UseQrScannerResult {
         const ctx = canvas.getContext("2d", { willReadFrequently: true });
         if (!ctx) return;
 
-        function scan() {
+        const scan = () => {
           if (cancelled) return;
 
           const v = videoRef.current;
@@ -109,7 +109,7 @@ export function useQrScanner(): UseQrScannerResult {
           }
 
           rafRef.current = requestAnimationFrame(scan);
-        }
+        };
 
         rafRef.current = requestAnimationFrame(scan);
       } catch (err) {
@@ -122,7 +122,7 @@ export function useQrScanner(): UseQrScannerResult {
           setStatus("error");
         }
       }
-    }
+    };
 
     start();
 
@@ -144,7 +144,7 @@ export function useQrScanner(): UseQrScannerResult {
 
     let cancelled = false;
 
-    function scan() {
+    const scan = () => {
       if (cancelled) return;
       const v = videoRef.current;
       const c = canvasRef.current;
@@ -177,7 +177,7 @@ export function useQrScanner(): UseQrScannerResult {
       }
 
       rafRef.current = requestAnimationFrame(scan);
-    }
+    };
 
     // Small delay to let the state settle
     const timer = setTimeout(() => {
@@ -196,4 +196,4 @@ export function useQrScanner(): UseQrScannerResult {
   }, [status]);
 
   return { videoRef, canvasRef, status, data, error, reset };
-}
+};

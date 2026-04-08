@@ -4,13 +4,13 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
 }
 
-export function Button({
+export const Button = ({
   variant = "primary",
   size = "lg",
   children,
   className = "",
   ...props
-}: ButtonProps) {
+}: ButtonProps) => {
   const base =
     "font-bold rounded-2xl transition-all duration-200 active:scale-95 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed";
 
@@ -36,4 +36,4 @@ export function Button({
       {children}
     </button>
   );
-}
+};

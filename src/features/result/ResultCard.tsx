@@ -7,14 +7,14 @@ interface ResultCardProps {
   onNextCard: () => void;
 }
 
-export function ResultCard({ trackId, onNextCard }: ResultCardProps) {
+export const ResultCard = ({ trackId, onNextCard }: ResultCardProps) => {
   const [copied, setCopied] = useState(false);
 
-  function handleOpen() {
+  const handleOpen = () => {
     openSpotifyTrack(trackId);
-  }
+  };
 
-  async function handleCopy() {
+  const handleCopy = async () => {
     try {
       await copyTrackLink(trackId);
       setCopied(true);
@@ -22,7 +22,7 @@ export function ResultCard({ trackId, onNextCard }: ResultCardProps) {
     } catch {
       // Clipboard API not available — ignore silently
     }
-  }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/70 animate-[fade-in_0.3s_ease-out]">
@@ -63,4 +63,4 @@ export function ResultCard({ trackId, onNextCard }: ResultCardProps) {
       </div>
     </div>
   );
-}
+};

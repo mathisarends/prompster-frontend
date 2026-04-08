@@ -1,16 +1,16 @@
 import { useQrScanner } from "./useQrScanner";
 import { parseSpotifyTrackId } from "./parseSpotify";
-import { Header } from "../../components/Header";
 import { PermissionGate } from "../../components/PermissionGate";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 interface ScannerScreenProps {
   onTrackFound: (trackId: string) => void;
 }
 
-export function ScannerScreen({ onTrackFound }: ScannerScreenProps) {
+export const ScannerScreen = ({ onTrackFound }: ScannerScreenProps) => {
   const { videoRef, canvasRef, status, data, error, reset } = useQrScanner();
-  const [invalidFlash, setInvalidFlash] = useState(false);
+  const invalidFlash =
+    status === "found" && !!data && !parseSpotifyTrackId(data);
 
   useEffect(() => {
     if (status !== "found" || !data) return;
@@ -22,20 +22,19 @@ export function ScannerScreen({ onTrackFound }: ScannerScreenProps) {
       onTrackFound(trackId);
     } else {
       // Invalid QR — shake & continue scanning
-      setInvalidFlash(true);
       if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
       const timer = setTimeout(() => {
-        setInvalidFlash(false);
         reset();
       }, 1800);
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+      };
     }
   }, [status, data, onTrackFound, reset]);
 
   if (status === "error") {
     return (
       <div className="h-full bg-bg">
-        <Header />
         <PermissionGate
           error={error}
           onRetry={() => window.location.reload()}
@@ -46,8 +45,6 @@ export function ScannerScreen({ onTrackFound }: ScannerScreenProps) {
 
   return (
     <div className="relative h-full w-full overflow-hidden bg-black">
-      <Header />
-
       {/* Hidden canvas for QR processing */}
       <canvas ref={canvasRef} className="hidden" />
 
@@ -60,22 +57,15 @@ export function ScannerScreen({ onTrackFound }: ScannerScreenProps) {
         autoPlay
       />
 
-      {/* Dark overlay with cutout */}
-      <div className="absolute inset-0 z-10">
-        {/* Top bar */}
-        <div className="absolute top-0 left-0 right-0 h-[25%] bg-black/60" />
-        {/* Bottom bar */}
-        <div className="absolute bottom-0 left-0 right-0 h-[30%] bg-black/60" />
-        {/* Left bar */}
-        <div className="absolute top-[25%] left-0 w-[12%] h-[45%] bg-black/60" />
-        {/* Right bar */}
-        <div className="absolute top-[25%] right-0 w-[12%] h-[45%] bg-black/60" />
+      {/* Dark overlay with centered rounded cutout */}
+      <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center px-6">
+        <div className="w-full max-w-80 aspect-square rounded-3xl shadow-[0_0_0_9999px_rgba(0,0,0,0.78)]" />
       </div>
 
       {/* Scan frame */}
-      <div className="absolute z-20 top-[25%] left-[12%] right-[12%] h-[45%] flex items-center justify-center">
+      <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-6">
         <div
-          className={`w-full h-full max-w-72 max-h-72 rounded-3xl border-3 transition-colors duration-300 ${
+          className={`relative w-full max-w-80 aspect-square rounded-3xl border-[3px] transition-colors duration-300 ${
             invalidFlash
               ? "border-error animate-[shake_0.4s_ease-in-out]"
               : status === "found"
@@ -83,36 +73,38 @@ export function ScannerScreen({ onTrackFound }: ScannerScreenProps) {
                 : "border-secondary animate-[neon-pulse_2s_ease-in-out_infinite]"
           }`}
         >
-          {/* Corner accents */}
-          <div className="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-current rounded-tl-3xl" />
-          <div className="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-current rounded-tr-3xl" />
-          <div className="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-current rounded-bl-3xl" />
-          <div className="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-current rounded-br-3xl" />
+          {/* Target hitmarkers */}
+          <div className="absolute -top-6 -left-6 h-10 w-10 rounded-tl-2xl border-t-4 border-l-4 border-white/95" />
+          <div className="absolute -top-6 -right-6 h-10 w-10 rounded-tr-2xl border-t-4 border-r-4 border-white/95" />
+          <div className="absolute -bottom-6 -left-6 h-10 w-10 rounded-bl-2xl border-b-4 border-l-4 border-white/95" />
+          <div className="absolute -bottom-6 -right-6 h-10 w-10 rounded-br-2xl border-b-4 border-r-4 border-white/95" />
         </div>
       </div>
 
       {/* Status text */}
-      <div className="absolute z-30 bottom-[18%] left-0 right-0 text-center">
+      <div className="absolute z-30 bottom-[10%] left-1/2 -translate-x-1/2 w-[86%] max-w-sm text-center">
         {invalidFlash ? (
-          <div className="animate-[shake_0.4s_ease-in-out]">
+          <div className="animate-[shake_0.4s_ease-in-out] px-4 py-3">
             <p className="text-error font-bold text-lg">Kein Spotify-QR-Code</p>
-            <p className="text-text-muted text-sm mt-1">
+            <p className="text-white/80 text-sm mt-1">
               Versuche eine Hitster-Karte
             </p>
           </div>
         ) : status === "scanning" || status === "idle" ? (
-          <div>
+          <div className="px-4 py-3">
             <p className="text-white font-semibold text-lg">
               Hitster-Karte scannen
             </p>
-            <p className="text-text-muted text-sm mt-1">
+            <p className="text-white/80 text-sm mt-1">
               Halte den QR-Code in den Rahmen
             </p>
           </div>
         ) : status === "found" ? (
-          <p className="text-success font-bold text-lg">Song gefunden! 🎵</p>
+          <p className="px-4 py-3 text-success font-bold text-lg">
+            Song gefunden! 🎵
+          </p>
         ) : null}
       </div>
     </div>
   );
-}
+};
