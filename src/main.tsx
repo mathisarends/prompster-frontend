@@ -9,11 +9,3 @@ createRoot(document.getElementById("root")!).render(
   </StrictMode>,
 );
 
-// Register service worker for PWA
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/prompster-frontend/sw.js").catch(() => {
-      // SW registration failed — app still works without it
-    });
-  });
-}
