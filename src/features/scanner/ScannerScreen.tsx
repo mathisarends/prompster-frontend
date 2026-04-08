@@ -5,9 +5,10 @@ import { useEffect } from "react";
 
 interface ScannerScreenProps {
   onTrackFound: (trackId: string) => void;
+  onClose?: () => void;
 }
 
-export const ScannerScreen = ({ onTrackFound }: ScannerScreenProps) => {
+export const ScannerScreen = ({ onTrackFound, onClose }: ScannerScreenProps) => {
   const { videoRef, canvasRef, status, data, error, reset } = useQrScanner();
   const invalidFlash =
     status === "found" && !!data && !parseSpotifyTrackId(data);
@@ -81,8 +82,23 @@ export const ScannerScreen = ({ onTrackFound }: ScannerScreenProps) => {
         </div>
       </div>
 
+      {/* Close button */}
+      {onClose && (
+        <div className="absolute z-30 bottom-8 left-1/2 -translate-x-1/2 flex justify-center">
+          <button
+            onClick={onClose}
+            aria-label="Scanner schließen"
+            className="w-12 h-12 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white hover:bg-white/20 active:scale-95 transition-all duration-200 backdrop-blur-sm"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      )}
+
       {/* Status text */}
-      <div className="absolute z-30 bottom-[10%] left-1/2 -translate-x-1/2 w-[86%] max-w-sm text-center">
+      <div className={`absolute z-30 left-1/2 -translate-x-1/2 w-[86%] max-w-sm text-center ${onClose ? 'bottom-[18%]' : 'bottom-[10%]'}`}>
         {invalidFlash ? (
           <div className="animate-[shake_0.4s_ease-in-out] px-4 py-3">
             <p className="text-error font-bold text-lg">Kein Spotify-QR-Code</p>
