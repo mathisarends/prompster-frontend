@@ -8,3 +8,8 @@ createRoot(document.getElementById("root")!).render(
     <App />
   </StrictMode>,
 );
+
+// Register the self-unregistering SW to clear old hitster-v1 cache
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/prompster-frontend/sw.js");
+}

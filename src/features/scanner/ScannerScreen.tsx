@@ -34,7 +34,8 @@ export const ScannerScreen = ({
         }
       };
       document.addEventListener("visibilitychange", handleVisibility);
-      return () => document.removeEventListener("visibilitychange", handleVisibility);
+      return () =>
+        document.removeEventListener("visibilitychange", handleVisibility);
     } else {
       // Invalid QR — shake & continue scanning
       if (navigator.vibrate) navigator.vibrate([50, 30, 50]);
@@ -160,8 +161,12 @@ export const ScannerScreen = ({
             <div className="bg-surface rounded-3xl border border-primary/30 shadow-[0_0_30px_var(--color-primary-glow)] p-6 space-y-5">
               <div className="flex flex-col items-center gap-3 text-center">
                 <span className="text-4xl">🎵</span>
-                <h2 className="text-xl font-bold text-white">Song wird gespielt</h2>
-                <p className="text-text-muted text-sm">Bereit für die nächste Karte?</p>
+                <h2 className="text-xl font-bold text-white">
+                  Song wird gespielt
+                </h2>
+                <p className="text-text-muted text-sm">
+                  Bereit für die nächste Karte?
+                </p>
               </div>
               <Button onClick={handleNextCard} className="w-full">
                 Nächste Karte scannen
