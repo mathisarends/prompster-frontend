@@ -35,12 +35,53 @@ export const useQrScanner = (): UseQrScannerResult => {
     }
   }, []);
 
+  const ensureCameraActive = useCallback(async () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const currentStream = streamRef.current;
+    const videoTracks = currentStream?.getVideoTracks() ?? [];
+    const hasLiveTrack = videoTracks.some(
+      (track) => track.readyState === "live",
+    );
+
+    if (!currentStream || !hasLiveTrack) {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: "environment",
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+          },
+          audio: false,
+        });
+
+        stopStream();
+        streamRef.current = stream;
+        video.srcObject = stream;
+      } catch {
+        setError("camera-error");
+        setStatus("error");
+        return;
+      }
+    }
+
+    if (video.paused || video.readyState < video.HAVE_CURRENT_DATA) {
+      try {
+        await video.play();
+      } catch {
+        // Playback may be blocked until user interaction; scanning can continue once video resumes.
+      }
+    }
+  }, [stopStream]);
+
   const reset = useCallback(() => {
     setData(null);
     setStatus("scanning");
     lastFoundRef.current = "";
     lastFoundTimeRef.current = 0;
-  }, []);
+    void ensureCameraActive();
+  }, [ensureCameraActive]);
 
   useEffect(() => {
     let cancelled = false;
@@ -131,6 +172,19 @@ export const useQrScanner = (): UseQrScannerResult => {
       stopStream();
     };
   }, [stopStream]);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        void ensureCameraActive();
+      }
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [ensureCameraActive]);
 
   // Restart scanning loop when reset is called
   useEffect(() => {
